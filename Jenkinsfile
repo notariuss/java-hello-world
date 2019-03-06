@@ -4,6 +4,7 @@ pipeline{
         stage('Printer'){
             steps{
                 echo "Hello world!"
+				echo `ls -1`
             }
         }
     }
