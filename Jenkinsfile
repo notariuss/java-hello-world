@@ -16,7 +16,9 @@ pipeline {
 
         stage ('Build') {
             steps {
-                sh 'mvn compile' 
+                sh 'ls /home/jenkins/tools/hudson.model.JDK/javaJDK8u201/bin'
+                sh 'mvn compile'
+                sh 'sleep 90' 
             }
         }
     }
