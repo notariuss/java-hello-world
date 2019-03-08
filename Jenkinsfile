@@ -59,7 +59,7 @@ spec:
         stage ('compile') {
             steps {
                 container('maven') {
-                    sh 'mvn clean compile test-compile'
+                    sh 'mvn clean compile'
                 }
             }
         }
@@ -70,13 +70,9 @@ spec:
                 }
                 container('docker') {
                     script {
-                        sh "echo $ECR_PASS > tmp && cat tmp"
-                        sh "env"
-                        sh "echo $ECR_PASS"
                         sh "docker login -u AWS -p ${ECR_PASS} https://818353068367.dkr.ecr.eu-central-1.amazonaws.com"
-                        sh "sleep 90"
                         registryIp = sh(script: 'getent hosts registry.kube-system | awk \'{ print $1 ; exit }\'', returnStdout: true).trim()
-                        sh "docker build . --build-arg REVISION=${revision}"  // . -t ${registryIp}/demo/app:${revision}
+                        sh "docker build . --build-arg REVISION=${revision} -t ${registryIp}:${revision}"  // . 
                     }
                 }
             }
