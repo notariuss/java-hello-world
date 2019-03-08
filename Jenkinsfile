@@ -38,7 +38,7 @@ spec:
         skipDefaultCheckout true
     }
 
-    enviroment {
+    environment {
         ECR_PASS = credentials('ecr_password')
     }
 
