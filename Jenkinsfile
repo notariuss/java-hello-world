@@ -1,16 +1,14 @@
-import groovy.text.StreamingTemplateEngine
-
-def renderTemplate(input, variables) {
-  def engine = new StreamingTemplateEngine()
-  return engine.createTemplate(input).make(variables).toString()
-}
-
 def branch
 def revision
 def registryIp = "818353068367.dkr.ecr.eu-central-1.amazonaws.com/andrew"
-def container_cfg_values = [ "registryPass": credentials('ecr_password') ]
 
-def container_cfg = """
+pipeline {
+
+    agent {
+        kubernetes {
+            label 'build-service-pod'
+            defaultContainer 'jnlp'
+            yaml """
 apiVersion: v1
 kind: Pod
 metadata:
@@ -26,9 +24,6 @@ spec:
     image: docker:18.09.2
     command: ["cat"]
     tty: true
-    env:
-    - name: ECR_PASS
-      value: $registryPass
     volumeMounts:
     - name: docker-sock
       mountPath: /var/run/docker.sock
@@ -37,18 +32,14 @@ spec:
     hostPath:
       path: /var/run/docker.sock
 """
-
-pipeline {
-
-    agent {
-        kubernetes {
-            label 'build-service-pod'
-            defaultContainer 'jnlp'
-            yaml renderTemplate(container_cfg, container_cfg_values)
         }
     }
     options {
         skipDefaultCheckout true
+    }
+
+    enviroment {
+        ECR_PASS = credentials('ecr_password')
     }
 
     stages {
