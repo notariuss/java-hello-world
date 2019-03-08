@@ -71,6 +71,7 @@ spec:
                 }
                 container('docker') {
                     script {
+                        sh "env"
                         sh "echo $ECR_PASS"
                         sh "docker login -u AWS -p ${ECR_PASS} https://818353068367.dkr.ecr.eu-central-1.amazonaws.com"
                         sh "sleep 30"
