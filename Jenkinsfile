@@ -68,7 +68,7 @@ spec:
                 container('docker') {
                     script {
                         registryIp = sh(script: 'getent hosts registry.kube-system | awk \'{ print $1 ; exit }\'', returnStdout: true).trim()
-                        sh "docker build --build-arg REVISION=${revision}"  // . -t ${registryIp}/demo/app:${revision}
+                        sh "docker build . --build-arg REVISION=${revision}"  // . -t ${registryIp}/demo/app:${revision}
                     }
                 }
             }
