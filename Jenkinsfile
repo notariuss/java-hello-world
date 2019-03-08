@@ -1,6 +1,5 @@
 def branch
 def revision
-def registryIp = "818353068367.dkr.ecr.eu-central-1.amazonaws.com/andrew"
 
 pipeline {
     agent {
@@ -39,6 +38,7 @@ spec:
 
     environment {
         ECR_PASS = credentials('ecr_password')
+        registryIp = "818353068367.dkr.ecr.eu-central-1.amazonaws.com/andrew"
     }
 
     stages {
@@ -70,8 +70,7 @@ spec:
                 }
                 container('docker') {
                     script {
-                        sh "docker login -u AWS -p ${ECR_PASS} https://818353068367.dkr.ecr.eu-central-1.amazonaws.com"
-                        registryIp = sh(script: 'getent hosts registry.kube-system | awk \'{ print $1 ; exit }\'', returnStdout: true).trim()
+                        sh "docker login -u AWS -p ${ECR_PASS} ${registryIp}"
                         sh "docker build . --build-arg REVISION=${revision} -t ${registryIp}:${revision}"  // . 
                     }
                 }
