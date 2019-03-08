@@ -1,6 +1,7 @@
 def branch
 def revision
 def registryIp = "818353068367.dkr.ecr.eu-central-1.amazonaws.com/andrew"
+def registryPass = credentials('ecr_password')
 
 pipeline {
 
@@ -24,6 +25,9 @@ spec:
     image: docker:18.09.2
     command: ["cat"]
     tty: true
+    env:
+    - name: ECR_PASS
+      value: $registryPass
     volumeMounts:
     - name: docker-sock
       mountPath: /var/run/docker.sock
@@ -67,7 +71,8 @@ spec:
                 }
                 container('docker') {
                     script {
-                        sh "echo `aws ecr get-login --no-include-email --region eu-central-1`"
+                        sh "echo $ECR_PASS"
+                        sh "docker login -u AWS -p $ECR_PASS https://818353068367.dkr.ecr.eu-central-1.amazonaws.com"
                         sh "sleep 30"
                         registryIp = sh(script: 'getent hosts registry.kube-system | awk \'{ print $1 ; exit }\'', returnStdout: true).trim()
                         sh "docker build . --build-arg REVISION=${revision}"  // . -t ${registryIp}/demo/app:${revision}
