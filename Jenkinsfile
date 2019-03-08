@@ -20,9 +20,6 @@ spec:
     image: maven:3.6.0-jdk-11-slim
     command: ["cat"]
     tty: true
-    volumeMounts:
-    - name: repository
-      mountPath: /root/.m2/repository
   - name: docker
     image: docker:18.09.2
     command: ["cat"]
@@ -31,9 +28,6 @@ spec:
     - name: docker-sock
       mountPath: /var/run/docker.sock
   volumes:
-  - name: repository
-    persistentVolumeClaim:
-      claimName: repository
   - name: docker-sock
     hostPath:
       path: /var/run/docker.sock
