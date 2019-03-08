@@ -3,7 +3,6 @@ def revision
 def registryIp = "818353068367.dkr.ecr.eu-central-1.amazonaws.com/andrew"
 
 pipeline {
-
     agent {
         kubernetes {
             label 'build-service-pod'
@@ -75,7 +74,7 @@ spec:
                         sh "env"
                         sh "echo $ECR_PASS"
                         sh "docker login -u AWS -p ${ECR_PASS} https://818353068367.dkr.ecr.eu-central-1.amazonaws.com"
-                        sh "sleep 30"
+                        sh "sleep 90"
                         registryIp = sh(script: 'getent hosts registry.kube-system | awk \'{ print $1 ; exit }\'', returnStdout: true).trim()
                         sh "docker build . --build-arg REVISION=${revision}"  // . -t ${registryIp}/demo/app:${revision}
                     }
