@@ -1,6 +1,6 @@
 def branch
 def revision
-def registryIp
+def registryIp = "818353068367.dkr.ecr.eu-central-1.amazonaws.com/andrew"
 
 pipeline {
 
@@ -67,6 +67,8 @@ spec:
                 }
                 container('docker') {
                     script {
+                        sh "echo `aws ecr get-login --no-include-email --region eu-central-1`"
+                        sh "sleep 30"
                         registryIp = sh(script: 'getent hosts registry.kube-system | awk \'{ print $1 ; exit }\'', returnStdout: true).trim()
                         sh "docker build . --build-arg REVISION=${revision}"  // . -t ${registryIp}/demo/app:${revision}
                     }
