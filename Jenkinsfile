@@ -1,15 +1,16 @@
+import groovy.text.StreamingTemplateEngine
+
+def renderTemplate(input, variables) {
+  def engine = new StreamingTemplateEngine()
+  return engine.createTemplate(input).make(variables).toString()
+}
+
 def branch
 def revision
 def registryIp = "818353068367.dkr.ecr.eu-central-1.amazonaws.com/andrew"
-def registryPass += credentials('ecr_password')
+def container_cfg_values = [ "registryPass": credentials('ecr_password') ]
 
-pipeline {
-
-    agent {
-        kubernetes {
-            label 'build-service-pod'
-            defaultContainer 'jnlp'
-            yaml """
+def container_cfg = yaml """
 apiVersion: v1
 kind: Pod
 metadata:
@@ -36,6 +37,14 @@ spec:
     hostPath:
       path: /var/run/docker.sock
 """
+
+pipeline {
+
+    agent {
+        kubernetes {
+            label 'build-service-pod'
+            defaultContainer 'jnlp'
+            yaml renderTemplate(container_cfg, container_cfg_values)
         }
     }
     options {
