@@ -1,7 +1,7 @@
 def branch
 def revision
 def registryIp = "818353068367.dkr.ecr.eu-central-1.amazonaws.com/andrew"
-def registryPass = 123
+def registryPass = credentials('ecr_password')
 
 pipeline {
 
