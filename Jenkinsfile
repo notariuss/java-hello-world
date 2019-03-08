@@ -10,7 +10,7 @@ def revision
 def registryIp = "818353068367.dkr.ecr.eu-central-1.amazonaws.com/andrew"
 def container_cfg_values = [ "registryPass": credentials('ecr_password') ]
 
-def container_cfg = yaml """
+def container_cfg = """
 apiVersion: v1
 kind: Pod
 metadata:
