@@ -51,7 +51,7 @@ spec:
                     if (branch != 'master') {
                         revision += "-${branch}"
                     }
-                    sh "echo 'Building revision: ${revision}'"
+                    sh "echo 'Building revision: ${revision}' && pwd"
                 }
             }
 
@@ -72,7 +72,7 @@ spec:
                     script {
                         sh "docker login -u AWS -p ${ECR_PASS} ${registryIp}"
                         sh "docker build . -t ${registryIp}:${revision}"  // . 
-                        sh "sleep 90"
+                        sh "echo `pwd` && sleep 90"
                         sh "docker push ${registryIp}:${revision}"
                     }
                 }
