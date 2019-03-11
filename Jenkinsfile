@@ -71,7 +71,8 @@ spec:
                 container('docker') {
                     script {
                         sh "docker login -u AWS -p ${ECR_PASS} ${registryIp}"
-                        sh "docker build . -t ${registryIp}:${revision}"  // . 
+                        sh "docker build . -t ${registryIp}:${revision}"  // 
+                        sh "docker tag ${revision} ${registryIp}:${revision}"
                         sh "docker push ${registryIp}:${revision}"
                     }
                 }
