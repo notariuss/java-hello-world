@@ -70,9 +70,8 @@ spec:
                 }
                 container('docker') {
                     script {
-                        sh "echo Revision: ${revision}"
                         sh "docker login -u AWS -p ${ECR_PASS} ${registryIp}"
-                        sh "docker build . --build-arg REVISION=${revision} -t ${revision}"  // . 
+                        sh "docker build . --build-arg REVISION=${revision} -t ${registryIp}:${revision}"  // . 
                         sh "docker push ${registryIp}:${revision}"
                     }
                 }
