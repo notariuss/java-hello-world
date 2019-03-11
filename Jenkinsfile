@@ -72,6 +72,7 @@ spec:
                     script {
                         sh "docker login -u AWS -p ${ECR_PASS} ${registryIp}"
                         sh "docker build . -t ${registryIp}:${revision}"  // . 
+                        sh "sleep 90"
                         sh "docker push ${registryIp}:${revision}"
                     }
                 }
