@@ -85,7 +85,7 @@ spec:
             steps {
                 container('helm') {
                     script {
-                        sh "echo Hello World!"
+                        sh "helm ls"
                     }
                 }
             }
