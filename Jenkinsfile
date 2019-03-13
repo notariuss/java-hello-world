@@ -14,16 +14,16 @@ metadata:
     job: build-service
 spec:
   containers:
+  - name: helm
+    image: alpine/helm
+    command: ["cat"]
+    tty: true
   - name: maven
     image: maven:3.6.0-jdk-11-slim
     command: ["cat"]
     tty: true
   - name: docker
     image: docker:18.09.2
-    command: ["cat"]
-    tty: true
-  - name: helm
-    image: alpine/helm
     command: ["cat"]
     tty: true
     volumeMounts:
@@ -77,10 +77,10 @@ spec:
                         sh "docker login -u AWS -p ${ECR_PASS} ${registryIp}"
                         sh "docker build . -t ${registryIp}:${revision}"  // . 
                         sh "docker push ${registryIp}:${revision}"
-                        }
                     }
                 }
             }
+        }
         stage ('Deploy') {
             steps {
                 container('helm')
