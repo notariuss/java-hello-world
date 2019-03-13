@@ -70,7 +70,7 @@ spec:
         stage ('build artifact') {
             steps {
                 container('maven') {
-                    sh "mvn package -Dmaven.test.skip -Drevision=${revision}"
+                    sh "mvn -B package -Dmaven.test.skip -Drevision=${revision}"
                     sh 'ls target'
                 }
                 container('docker') {
