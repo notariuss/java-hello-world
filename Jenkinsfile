@@ -22,6 +22,10 @@ spec:
     image: docker:18.09.2
     command: ["cat"]
     tty: true
+  - name: helm
+    image: alpine/helm
+    command: ["cat"]
+    tty: true
     volumeMounts:
     - name: docker-sock
       mountPath: /var/run/docker.sock
@@ -51,7 +55,7 @@ spec:
                     if (branch != 'master') {
                         revision += "-${branch}"
                     }
-                    sh "echo 'Building revision: ${revision}' && pwd"
+                    sh "echo 'Building revision: ${revision}'"
                 }
             }
 
@@ -72,11 +76,16 @@ spec:
                     script {
                         sh "docker login -u AWS -p ${ECR_PASS} ${registryIp}"
                         sh "docker build . -t ${registryIp}:${revision}"  // . 
-                        sh "echo `pwd` && sleep 90"
                         sh "docker push ${registryIp}:${revision}"
+                        }
                     }
                 }
             }
         }
-}
+        stage ('Deploy') {
+            steps {
+                container('helm')
+                sh "echo Hello World!
+            }
+        }
 }
