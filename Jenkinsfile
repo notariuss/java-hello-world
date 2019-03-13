@@ -64,6 +64,7 @@ spec:
             steps {
                 container('maven') {
                     sh 'mvn clean compile'
+                    sh 'ls target'
                 }
             }
         }
