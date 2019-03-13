@@ -63,8 +63,7 @@ spec:
         stage ('compile') {
             steps {
                 container('maven') {
-                    sh 'mvn clean compile'
-                    sh 'ls target'
+                    sh 'mvn -B compile'
                 }
             }
         }
@@ -72,6 +71,7 @@ spec:
             steps {
                 container('maven') {
                     sh "mvn package -Dmaven.test.skip -Drevision=${revision}"
+                    sh 'ls target'
                 }
                 container('docker') {
                     script {
