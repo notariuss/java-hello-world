@@ -71,7 +71,6 @@ spec:
             steps {
                 container('maven') {
                     sh "mvn -B package -Dmaven.test.skip -Drevision=${revision}"
-                    sh 'ls target'
                 }
                 container('docker') {
                     script {
