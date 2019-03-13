@@ -81,11 +81,11 @@ spec:
                     }
                 }
             }
-        }
         stage ('Deploy') {
             steps {
                 container('helm')
                 sh "echo Hello World!"
             }
         }
+    }
 }
