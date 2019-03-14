@@ -89,7 +89,7 @@ spec:
                     script {
                         sh "helm get values --all hello"
                         currentSlot = sh(script: "helm get values --all hello | grep 'productionSlot:' | cut -d ' ' -f2")
-                        if (currentSlot == 'blue') {
+                        if (currentSlot.trim() == "blue") {
                                 newSlot="green"
                                 tagVar="greenImage"
                         } else {
