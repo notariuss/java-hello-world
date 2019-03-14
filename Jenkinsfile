@@ -2,6 +2,7 @@ def branch
 def revision
 def currentSlot
 def tagVar
+def userInput
 
 pipeline {
     agent {
@@ -92,11 +93,21 @@ spec:
                         if (currentSlot == "blue") {
                                 newSlot="green"
                                 tagVar="imageGreen"
-                        } else {
+                        } else if (currentSlot == "green") {
                                 newSlot="blue"
                                 tagVar="imageBlue"
+                        } else {
+                            sh "helm install -n hello java-hello-world --set imageBlue.tag={revision},blue.enabled=true"
                         }
-                        sh "helm upgrade hello java-hello-world --set ${tagVar}.tag=${revision},${newSlot}.enabled=true,productionSlot=${newSlot} --reuse-values"
+                        sh "helm upgrade hello java-hello-world --set ${tagVar}.tag=${revision},${newSlot}.enabled=true --reuse-values"
+                        userInput = input(message: 'Switch productionSlot? y\\n'parameters: [[$class: 'TextParameterDefinition', defaultValue: 'uat', description: 'Environment', name: 'env']])
+                        if (userInput == "y") {
+                            sh "helm upgrade hello java-hello-world --set productionSlot=${newSlot} --reuse-values"
+                        }
+                        userInput = input(message: 'Delete old deployment? y\\n'parameters: [[$class: 'TextParameterDefinition', defaultValue: 'uat', description: 'Environment', name: 'env']])
+                        if (userInput == "y") {
+                            sh "helm upgrade hello java-hello-world --set ${currentSlot}.enabled=false --reuse-values"
+                        }
                     }
                 }
             }
