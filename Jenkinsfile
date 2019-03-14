@@ -96,7 +96,7 @@ spec:
                                 newSlot="blue"
                                 tagVar="BlueImage"
                         }
-                        sh "helm upgrade hello java-hello-world --set $TAGVAR.tag=$REVISION $NEWSLOT.enabled=true productionSlot=$NEWSLOT --reuse-values"
+                        sh "helm upgrade hello java-hello-world --set ${tagVar}.tag=${revision} ${newSlot}.enabled=true productionSlot=${newSlot} --reuse-values"
                     }
                 }
             }
