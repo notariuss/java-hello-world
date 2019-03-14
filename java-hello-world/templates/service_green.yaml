@@ -17,4 +17,8 @@ spec:
   selector:
     app.kubernetes.io/name: {{ include "java-hello-world.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    slot: {{ .Values.productionSlot }}
+    {{- if eq .Values.productionSlot "blue" }}
+    slot: green
+    {{- else }}
+    slot: blue
+    {{- end }}

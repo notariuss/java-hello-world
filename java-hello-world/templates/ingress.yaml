@@ -25,18 +25,16 @@ spec:
   {{- end }}
 {{- end }}
   rules:
-    - host: java.p0pc0rn.cf
+  {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
       http:
         paths:
-          - path: "/"
+        {{- range .paths }}
+          - path: {{ .path }}
             backend:
-              serviceName: {{ $fullName }}-blue
+              serviceName: {{ $fullName }}{{ .backendsuffix }}
               servicePort: http
-    - host: staging.p0pc0rn.cf
-      http:
-        paths:
-          - path: "/"
-            backend:
-              serviceName: {{ $fullName }}-green
-              servicePort: http
+        {{- end }}
+  {{- end }}
+
 {{- end }}
