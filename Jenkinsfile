@@ -75,7 +75,7 @@ spec:
                 container('docker') {
                     script {
                         sh "docker login -u AWS -p ${ECR_PASS} ${registryIp}"
-                        sh "docker build . -t ${registryIp}:${revision}"  // . 
+                        sh "docker build . -t ${registryIp}:${revision}"
                         sh "docker push ${registryIp}:${revision}"
                     }
                 }
@@ -85,7 +85,15 @@ spec:
             steps {
                 container('helm') {
                     script {
-                        sh "helm ls"
+                        currentSlot = sh(script: "currentSlot = `helm get values --all hello | grep -Po 'productionSlot: \K.*'`").trim()
+                        if (currentSlot == 'blue') {
+                                newSlot="green"
+                                tagVar="greenImage"
+                        } else {
+                                newSlot="blue"
+                                tagVar="BlueImage"
+                        }
+                        sh "helm upgrade hello java-hello-world --set $TAGVAR.tag=$REVISION $NEWSLOT.enabled=true productionSlot=$NEWSLOT --reuse-values"
                     }
                 }
             }
