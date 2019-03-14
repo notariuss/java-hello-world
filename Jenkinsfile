@@ -96,7 +96,8 @@ spec:
                                 newSlot="blue"
                                 tagVar="imageBlue"
                         } else {
-                            sh "helm install -n hello java-hello-world --set imageBlue.tag={revision},blue.enabled=true"
+                            sh "helm install -n hello java-hello-world --set imageBlue.tag=${revision},blue.enabled=true"
+                            return
                         }
                         sh "helm upgrade hello java-hello-world --set ${tagVar}.tag=${revision},${newSlot}.enabled=true --reuse-values"
                         userInput = input(message: 'Switch productionSlot? y\\n', parameters: [[$class: 'TextParameterDefinition', defaultValue: 'uat', description: 'Environment', name: 'env']])
