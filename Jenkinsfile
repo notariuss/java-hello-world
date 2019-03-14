@@ -1,5 +1,7 @@
 def branch
 def revision
+def currentSlot
+def tagVar
 
 pipeline {
     agent {
