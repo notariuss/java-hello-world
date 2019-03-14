@@ -88,7 +88,7 @@ spec:
                 container('helm') {
                     script {
                         sh "helm get values --all hello"
-                        currentSlot = sh(script: "helm get values --all hello | grep 'productionSlot:' | cut -d ' ' -f2 | tr -d '[:space:]'")
+                        currentSlot = sh(script: "helm get values --all hello | grep 'productionSlot:' | cut -d ' ' -f2 | tr -d '[:space:]'", returnStdout: true).trim()
                         if (currentSlot == "blue") {
                                 newSlot="green"
                                 tagVar="greenImage"
