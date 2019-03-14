@@ -94,7 +94,7 @@ spec:
                                 tagVar="greenImage"
                         } else {
                                 newSlot="blue"
-                                tagVar="BlueImage"
+                                tagVar="blueImage"
                         }
                         sh "helm upgrade hello java-hello-world --set ${tagVar}.tag=${revision},${newSlot}.enabled=true,productionSlot=${newSlot} --reuse-values"
                     }
